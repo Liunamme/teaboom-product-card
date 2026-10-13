@@ -1,0 +1,43 @@
+{% with pack=product.packs.0 %}
+<article class="product-card" data-product-card>
+  <div class="product-card__main">
+    {% include "components/product-gallery/product-gallery.html" with images=product.images pack=pack %}
+
+    <header class="product-card__head">
+      <div class="product-card__topline">
+        <a class="product-card__category" href="{{ product.category.get_absolute_url }}">{{ product.category.name }}</a>
+        <button class="icon-btn" type="button" aria-label="Добавить в избранное" aria-pressed="false" data-favorite>
+          <svg class="icon-btn__icon" width="20" height="20" aria-hidden="true"><use href="#i-heart"/></svg>
+        </button>
+      </div>
+
+      <h1 class="product-card__title">{{ product.name }}</h1>
+
+      <dl class="product-card__meta">
+        <div class="product-card__meta-item">
+          <dt>Арт.</dt>
+          <dd class="product-card__sku" data-product-sku>{{ pack.sku }}</dd>
+        </div>
+        <div class="product-card__meta-item product-card__stock">
+          <dt class="visually-hidden">Наличие</dt>
+          <dd>В наличии</dd>
+        </div>
+      </dl>
+    </header>
+
+    <p class="product-card__lead">{{ product.lead }}</p>
+
+    <form class="product-card__purchase" action="{% url 'cart:add' %}" method="post" data-buy-box>
+      {% csrf_token %}
+      {% include "components/pack-picker/pack-picker.html" with packs=product.packs %}
+      {% include "components/buy-box/buy-box.html" with pack=pack %}
+    </form>
+
+    {% include "components/facts/facts.html" with facts=product.facts %}
+  </div>
+
+  {% include "components/product-about/product-about.html" with product=product %}
+</article>
+{% endwith %}
+
+{% include "components/product-schema/product-schema.html" with product=product %}

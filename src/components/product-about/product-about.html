@@ -1,0 +1,27 @@
+<section class="product-about" aria-labelledby="product-about-title">
+  <div class="product-about__story">
+    <h2 class="product-about__title" id="product-about-title">О чае</h2>
+    <p class="product-about__text">{{ product.description }}</p>
+
+    {% if product.taste_notes %}
+      <h3 class="product-about__subtitle">Ноты вкуса</h3>
+      <ul class="product-about__notes">
+        {% for note in product.taste_notes %}
+          <li class="product-about__note">{{ note }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </div>
+
+  <dl class="product-about__specs">
+    {% for spec in product.specs %}
+      <div class="product-about__spec">
+        <dt class="product-about__term">
+          <svg class="product-about__icon" width="18" height="18" aria-hidden="true"><use href="#i-{{ spec.icon }}"/></svg>
+          {{ spec.label }}
+        </dt>
+        <dd class="product-about__value">{{ spec.value }}</dd>
+      </div>
+    {% endfor %}
+  </dl>
+</section>

@@ -1,0 +1,17 @@
+{% load l10n %}
+<div class="price" data-price-panel aria-live="polite" aria-atomic="true">
+  <p class="price__row">
+    <span class="visually-hidden">Цена:</span>
+    <data class="price__current" value="{{ pack.price|unlocalize }}" data-price-current>{{ pack.price|floatformat:"-2g" }} ₽</data>
+    <span class="price__old" data-price-old-wrap{% if not pack.old_price %} hidden{% endif %}>
+      <span class="visually-hidden">без скидки</span>
+      <s data-price-old>{{ pack.old_price|floatformat:"-2g" }} ₽</s>
+    </span>
+  </p>
+  <p class="price__info">
+    <span class="price__saving" data-price-saving-wrap{% if not pack.old_price %} hidden{% endif %}>
+      Выгода <span data-price-saving>{{ pack.saving|floatformat:"-2g" }} ₽</span>
+    </span>
+    <span class="price__unit" data-price-unit>{{ pack.price_per_100g|floatformat:"2g" }} ₽ за 100 г</span>
+  </p>
+</div>

@@ -1,0 +1,154 @@
+@use "styles/abstracts" as *;
+
+.product-about {
+  display: grid;
+  gap: rem(20px);
+  margin-top: rem(32px);
+
+  @include respond-to(tablet) {
+    margin-top: rem(28px);
+    padding-top: rem(28px);
+    border-top: 1px solid color(line-soft);
+  }
+
+  @include respond-to(desktop) {
+    grid-template-columns: minmax(0, 1fr) minmax(0, rem(460px));
+    align-items: start;
+    gap: rem(64px);
+    margin-top: rem(40px);
+    padding-top: rem(40px);
+  }
+
+  &__story {
+    display: flex;
+    flex-direction: column;
+    gap: rem(16px);
+  }
+
+  &__title {
+    margin: 0;
+    font-size: rem(22px);
+    font-weight: 800;
+    line-height: 1.25;
+
+    @include respond-to(desktop) {
+      font-size: rem(24px);
+    }
+  }
+
+  &__text {
+    max-width: 68ch;
+    margin: 0;
+    font-size: rem(16px);
+    line-height: 1.7;
+    color: color(text);
+  }
+
+  &__subtitle {
+    margin: rem(4px) 0 0;
+    color: color(muted);
+
+    @include overline;
+  }
+
+  &__notes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: rem(8px);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__note {
+    display: inline-flex;
+    align-items: center;
+    gap: rem(8px);
+    padding: rem(8px) rem(14px);
+    border-radius: radius(pill);
+    background: color(surface);
+    font-size: rem(14px);
+    font-weight: 600;
+
+    @include respond-to(tablet) {
+      background: color(page);
+    }
+
+    &::before {
+      content: "";
+      width: rem(8px);
+      height: rem(8px);
+      border-radius: 50%;
+      background: color(brand);
+    }
+  }
+
+  &__specs {
+    margin: 0;
+    padding: rem(4px) rem(20px);
+    border-radius: radius(lg);
+    background: color(brand-soft);
+    font-size: rem(15px);
+    line-height: 1.45;
+
+    @include respond-to(tablet) {
+      padding: rem(8px) rem(24px);
+      border-radius: radius(md);
+    }
+
+    @include respond-to(desktop) {
+      padding-inline: rem(28px);
+    }
+  }
+
+  &__spec {
+    display: grid;
+    gap: rem(2px);
+    padding: rem(12px) 0;
+
+    & + & {
+      border-top: 1px solid color(brand-line);
+    }
+
+    @include respond-to(tablet) {
+      grid-template-columns: rem(176px) minmax(0, 1fr);
+      gap: rem(16px);
+      padding: rem(14px) 0;
+    }
+
+    @include respond-to(desktop) {
+      grid-template-columns: rem(164px) minmax(0, 1fr);
+    }
+  }
+
+  &__term {
+    display: flex;
+    align-items: center;
+    gap: rem(8px);
+    font-size: rem(13px);
+    color: color(muted);
+
+    @include respond-to(tablet) {
+      align-items: flex-start;
+      font-size: inherit;
+    }
+  }
+
+  &__icon {
+    width: rem(16px);
+    height: rem(16px);
+
+    @include icon-stroke(1.8);
+
+    @include respond-to(tablet) {
+      width: rem(18px);
+      height: rem(18px);
+      margin-top: rem(2px);
+    }
+  }
+
+  &__value {
+    margin: 0;
+    font-weight: 600;
+  }
+}

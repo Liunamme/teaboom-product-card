@@ -1,0 +1,26 @@
+@use "styles/abstracts" as *;
+
+:root {
+  @each $name, $value in $colors {
+    --tb-color-#{$name}: #{$value};
+  }
+
+  @each $name, $value in $radius {
+    --tb-radius-#{$name}: #{$value};
+  }
+
+  --tb-font: #{$font-family};
+  --tb-shadow-card: 0 1px 2px rgb(32 32 32 / 4%), 0 8px 32px rgb(32 32 32 / 5%);
+  --tb-gutter: #{rem(16px)};
+
+  @include respond-to(tablet) {
+    --tb-gutter: #{rem(32px)};
+  }
+}
+
+:where(.product-card, .breadcrumbs, .cart-fab, .lightbox),
+:where(.product-card, .breadcrumbs, .cart-fab, .lightbox) *,
+:where(.product-card, .breadcrumbs, .cart-fab, .lightbox) ::before,
+:where(.product-card, .breadcrumbs, .cart-fab, .lightbox) ::after {
+  box-sizing: border-box;
+}

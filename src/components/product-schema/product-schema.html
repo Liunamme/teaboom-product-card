@@ -1,0 +1,30 @@
+{% load l10n %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "{{ product.name|escapejs }}",
+  "description": "{{ product.lead|escapejs }}",
+  "category": "{{ product.category.name|escapejs }}",
+  "image": "{{ request.scheme }}://{{ request.get_host }}{{ product.images.0.base }}-970.jpg",
+  "offers": {
+    "@type": "AggregateOffer",
+    "priceCurrency": "RUB",
+    "lowPrice": "{{ product.packs.0.price|unlocalize }}",
+    "highPrice": "{% with last_pack=product.packs|last %}{{ last_pack.price|unlocalize }}{% endwith %}",
+    "offerCount": {{ product.packs|length }},
+    "offers": [
+      {% for pack in product.packs %}
+      {
+        "@type": "Offer",
+        "sku": "{{ pack.sku }}",
+        "name": "{{ pack.label|escapejs }}",
+        "price": "{{ pack.price|unlocalize }}",
+        "priceCurrency": "RUB",
+        "availability": "https://schema.org/InStock"
+      }{% if not forloop.last %},{% endif %}
+      {% endfor %}
+    ]
+  }
+}
+</script>

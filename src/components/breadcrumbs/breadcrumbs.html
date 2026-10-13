@@ -1,0 +1,34 @@
+<nav class="breadcrumbs" aria-label="Хлебные крошки">
+  <ol class="breadcrumbs__list">
+    {% for crumb in breadcrumbs %}
+      <li class="breadcrumbs__item">
+        <a class="breadcrumbs__link" href="{{ crumb.url }}">{{ crumb.name }}</a>
+      </li>
+    {% endfor %}
+    <li class="breadcrumbs__item">
+      <span class="breadcrumbs__current" aria-current="page">{{ current }}</span>
+    </li>
+  </ol>
+</nav>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {% for crumb in breadcrumbs %}
+    {
+      "@type": "ListItem",
+      "position": {{ forloop.counter }},
+      "name": "{{ crumb.name|escapejs }}",
+      "item": "{{ request.scheme }}://{{ request.get_host }}{{ crumb.url }}"
+    },
+    {% endfor %}
+    {
+      "@type": "ListItem",
+      "position": {{ breadcrumbs|length|add:1 }},
+      "name": "{{ current|escapejs }}"
+    }
+  ]
+}
+</script>

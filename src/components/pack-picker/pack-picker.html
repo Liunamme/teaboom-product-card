@@ -1,0 +1,8 @@
+<fieldset class="pack-picker" data-pack-picker>
+  <legend class="pack-picker__legend">Фасовка</legend>
+  <div class="pack-picker__list">
+    {% for pack in packs %}
+      {% include "components/pack-picker/pack-option/pack-option.html" with pack=pack checked=forloop.first %}
+    {% endfor %}
+  </div>
+</fieldset>

@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+  {% include "components/icons/icons.html" %}
+
+  <main class="page">
+    {% include "components/breadcrumbs/breadcrumbs.html" with breadcrumbs=breadcrumbs current=product.name %}
+    {% include "components/product-card/product-card.html" with product=product %}
+  </main>
+
+  {% include "components/cart-fab/cart-fab.html" %}
+  {% include "components/lightbox/lightbox.html" %}
+{% endblock %}

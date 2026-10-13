@@ -1,0 +1,19 @@
+@use "styles/base/fonts";
+@use "styles/base/root";
+@use "styles/base/page";
+
+@use "components/btn/btn";
+@use "components/icon-btn/icon-btn";
+@use "components/breadcrumbs/breadcrumbs";
+@use "components/product-card/product-card";
+@use "components/product-gallery/product-gallery";
+@use "components/pack-picker/pack-picker";
+@use "components/price/price";
+@use "components/buy-box/buy-box";
+@use "components/buy-box/qty/qty";
+@use "components/facts/facts";
+@use "components/product-about/product-about";
+@use "components/cart-fab/cart-fab";
+@use "components/lightbox/lightbox";
+
+@use "styles/base/motion";

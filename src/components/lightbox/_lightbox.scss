@@ -1,0 +1,126 @@
+@use "styles/abstracts" as *;
+
+.lightbox {
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  max-height: none;
+  margin: 0;
+  padding: rem(72px) rem(16px) rem(24px);
+  border: 0;
+  background: transparent;
+  overflow: hidden;
+
+  &::backdrop {
+    background: rgb(20 20 20 / 88%);
+  }
+
+  &[open] {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: rem(20px);
+  }
+
+  @include respond-to(tablet) {
+    padding: rem(48px) rem(96px);
+  }
+
+  &__figure {
+    width: min(100%, 860px, calc(100vh - 200px));
+    width: min(100%, 860px, calc(100dvh - 200px));
+    margin: 0;
+    touch-action: pan-y;
+    user-select: none;
+    animation: lightbox-in 0.25s $ease;
+  }
+
+  &__img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+    border-radius: radius(lg);
+    background: color(surface);
+    object-fit: cover;
+    -webkit-user-drag: none;
+
+    @include transition(opacity);
+
+    &--fading {
+      opacity: 0;
+    }
+  }
+
+  &__controls {
+    display: flex;
+    align-items: center;
+    gap: rem(20px);
+
+    @include respond-to(tablet) {
+      display: contents;
+    }
+  }
+
+  &__counter {
+    min-width: 5ch;
+    margin: 0;
+    color: rgb(255 255 255 / 85%);
+    font-size: rem(15px);
+    font-weight: 600;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__nav,
+  &__close {
+    width: rem(48px);
+    height: rem(48px);
+    border-color: transparent;
+    background: rgb(255 255 255 / 92%);
+
+    @include hover {
+      border-color: transparent;
+      background: color(brand);
+    }
+  }
+
+  &__nav {
+    @include respond-to(tablet) {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+
+      &--prev {
+        left: rem(24px);
+      }
+
+      &--next {
+        right: rem(24px);
+      }
+    }
+
+    &--prev .icon-btn__icon {
+      transform: scaleX(-1);
+    }
+  }
+
+  &__close {
+    position: absolute;
+    top: rem(16px);
+    right: rem(16px);
+
+    @include respond-to(tablet) {
+      top: rem(24px);
+      right: rem(24px);
+    }
+  }
+}
+
+@keyframes lightbox-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+}

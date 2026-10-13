@@ -1,0 +1,155 @@
+@use "styles/abstracts" as *;
+
+.product-gallery {
+  display: flex;
+  flex-direction: column;
+  gap: rem(12px);
+  min-width: 0;
+
+  &__stage {
+    position: relative;
+    aspect-ratio: 1;
+    border-radius: radius(lg);
+    background: color(surface);
+    overflow: hidden;
+
+    @include respond-to(tablet) {
+      border: 1px solid color(line-soft);
+      border-radius: radius(md);
+    }
+  }
+
+  &__open {
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: zoom-in;
+
+    @include focus-ring(-3px);
+
+    @include hover {
+      .product-gallery__img {
+        transform: scale(1.03);
+      }
+
+      .product-gallery__zoom {
+        background: color(brand);
+      }
+    }
+  }
+
+  &__img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+
+    @include transition(transform, opacity);
+
+    &--fading {
+      opacity: 0.4;
+    }
+  }
+
+  &__zoom {
+    position: absolute;
+    top: rem(10px);
+    right: rem(10px);
+    display: grid;
+    place-items: center;
+    width: rem(44px);
+    height: rem(44px);
+    border-radius: 50%;
+    background: rgb(255 255 255 / 92%);
+    color: color(ink);
+
+    @include transition(background-color);
+
+    @include respond-to(desktop) {
+      top: rem(16px);
+      right: rem(16px);
+    }
+
+    svg {
+      @include icon-stroke;
+    }
+  }
+
+  &__badge {
+    position: absolute;
+    top: rem(14px);
+    left: rem(14px);
+    margin: 0;
+    padding: rem(5px) rem(12px);
+    border-radius: radius(pill);
+    background: color(sale);
+    color: color(surface);
+    font-size: rem(14px);
+    font-weight: 700;
+    line-height: 1.4;
+    pointer-events: none;
+
+    @include respond-to(desktop) {
+      top: rem(20px);
+      left: rem(20px);
+    }
+  }
+
+  &__thumbs {
+    display: flex;
+    gap: rem(8px);
+    margin: 0;
+    padding: 2px;
+    list-style: none;
+    overflow-x: auto;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    @include respond-to(desktop) {
+      gap: rem(12px);
+    }
+  }
+
+  &__thumb {
+    display: block;
+    flex-shrink: 0;
+    width: rem(64px);
+    height: rem(64px);
+    padding: 0;
+    border: 1px solid color(line-soft);
+    border-radius: radius(sm);
+    background: color(surface);
+    overflow: hidden;
+    cursor: pointer;
+
+    @include transition(border-color, box-shadow, opacity);
+    @include focus-ring;
+
+    @include hover {
+      border-color: color(ink);
+    }
+
+    @include respond-to(desktop) {
+      width: rem(80px);
+      height: rem(80px);
+    }
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    &--active {
+      border-color: color(ink);
+      box-shadow: inset 0 0 0 1px color(ink);
+    }
+  }
+}

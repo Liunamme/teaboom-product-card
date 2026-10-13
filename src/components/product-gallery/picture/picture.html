@@ -1,0 +1,14 @@
+{% with sizes="(min-width: 1200px) 520px, (min-width: 768px) 300px, calc(100vw - 32px)" %}
+<picture>
+  <source type="image/avif" srcset="{{ image.base }}-480.avif 480w, {{ image.base }}-970.avif 970w" sizes="{{ sizes }}" data-gallery-avif>
+  <source type="image/webp" srcset="{{ image.base }}-480.webp 480w, {{ image.base }}-970.webp 970w" sizes="{{ sizes }}" data-gallery-webp>
+  <img class="product-gallery__img"
+       src="{{ image.base }}-970.jpg"
+       srcset="{{ image.base }}-480.jpg 480w, {{ image.base }}-970.jpg 970w"
+       sizes="{{ sizes }}"
+       width="970" height="970"
+       {% if priority %}fetchpriority="high"{% else %}loading="lazy" decoding="async"{% endif %}
+       alt="{{ image.alt }}"
+       data-gallery-img>
+</picture>
+{% endwith %}

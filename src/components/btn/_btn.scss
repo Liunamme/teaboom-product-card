@@ -1,0 +1,78 @@
+@use "styles/abstracts" as *;
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: rem(10px);
+  min-height: rem(56px);
+  padding: 0 rem(28px);
+  border: 0;
+  border-radius: radius(pill);
+  font-family: inherit;
+  font-size: rem(16px);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  touch-action: manipulation;
+  user-select: none;
+
+  @include transition(background-color, color, transform);
+  @include focus-ring(3px);
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  &[hidden] {
+    display: none;
+  }
+
+  &__icon {
+    @include icon-stroke;
+  }
+
+  &--cart {
+    background: color(brand);
+    color: color(ink);
+
+    @include hover {
+      background: color(ink);
+      color: color(brand);
+    }
+  }
+
+  &--outline {
+    border: 1px solid color(ink);
+    background: color(surface);
+    color: color(ink);
+    text-decoration: none;
+
+    @include hover {
+      background: color(ink);
+      color: color(brand);
+    }
+
+    .btn__icon {
+      @include transition(transform);
+    }
+
+    &:focus-visible .btn__icon {
+      animation: btn-arrow-nudge 0.9s $ease infinite;
+    }
+
+    @media (hover: hover) {
+      &:hover .btn__icon {
+        animation: btn-arrow-nudge 0.9s $ease infinite;
+      }
+    }
+  }
+}
+
+@keyframes btn-arrow-nudge {
+  50% {
+    transform: translateX(4px);
+  }
+}

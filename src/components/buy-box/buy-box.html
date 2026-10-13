@@ -1,0 +1,19 @@
+<div class="buy-box">
+  {% include "components/price/price.html" with pack=pack %}
+
+  <div class="buy-box__actions">
+    <input type="hidden" name="quantity" value="1">
+    <button class="btn btn--cart" type="submit" data-buy-add>
+      <svg class="btn__icon" width="22" height="22" aria-hidden="true"><use href="#i-cart"/></svg>
+      В корзину
+    </button>
+
+    <div class="buy-box__in-cart" hidden data-buy-in-cart>
+      {% include "components/buy-box/qty/qty.html" %}
+      <a class="btn btn--outline" href="{% url 'cart:detail' %}">
+        Оформить
+        <svg class="btn__icon" width="20" height="20" aria-hidden="true"><use href="#i-arrow"/></svg>
+      </a>
+    </div>
+  </div>
+</div>

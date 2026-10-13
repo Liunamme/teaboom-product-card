@@ -15,14 +15,13 @@
   <meta property="og:image" content="https://media.teaboom.ru/images/e4bb1618-fb80-41e2-8758-86f884ce095d.jpg">
   <meta property="og:locale" content="ru_RU">
 
-  <!-- Главное фото это LCP-элемент, просим браузер взять его в первую очередь -->
   <link rel="preload" as="image" type="image/avif"
         imagesrcset="assets/img/ananasovyj-ulun-1-480.avif 480w, assets/img/ananasovyj-ulun-1-970.avif 970w"
         imagesizes="(min-width: 1200px) 520px, (min-width: 768px) 300px, calc(100vw - 32px)"
         fetchpriority="high">
   <link rel="preload" href="assets/fonts/open-sans-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="dist/css/main.css">
-  <script src="src/js/product-card.js" type="module"></script>
+  <script src="src/main.js" type="module"></script>
 
   <script type="application/ld+json">
   {
@@ -63,7 +62,6 @@
   </script>
 </head>
 <body>
-  <!-- Спрайт иконок: каждая иконка описана один раз, дальше <use href="#i-…"> -->
   <svg width="0" height="0" style="position: absolute" aria-hidden="true">
     <symbol id="i-cart" viewBox="0 0 24 24"><path d="M3 4h2l2.4 11h11l2-8H6.2"/><circle cx="9.5" cy="19.5" r="1.5"/><circle cx="17" cy="19.5" r="1.5"/></symbol>
     <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></symbol>
@@ -73,13 +71,11 @@
     <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
     <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
   
-    <!-- Заваривание -->
     <symbol id="i-temperature" viewBox="0 0 24 24"><path d="M14 14.8V4.5a2.5 2.5 0 0 0-5 0v10.3a4.5 4.5 0 1 0 5 0z"/><path d="M11.5 11v6"/><path d="M17.5 5h2M17.5 9h2"/></symbol>
     <symbol id="i-timer" viewBox="0 0 24 24"><circle cx="12" cy="13.5" r="7.5"/><path d="M12 10v3.5l2.5 2M10 2.5h4M19 5.5l-1.5 1.5"/></symbol>
     <symbol id="i-teapot" viewBox="0 0 24 24"><path d="M5.5 10.5h11v4a5.5 5.5 0 0 1-5.5 5.5h0a5.5 5.5 0 0 1-5.5-5.5v-4z"/><path d="M8.5 10.5a2.5 2.5 0 0 1 5 0M11 6.5v1.5"/><path d="M5.5 12.5L2.5 10.5v3.5l3.3 2"/><path d="M16.5 12h1.2a2.3 2.3 0 0 1 0 4.6h-1.6"/></symbol>
     <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21.5s7-6.1 7-12a7 7 0 1 0-14 0c0 5.9 7 12 7 12z"/><circle cx="12" cy="9.5" r="2.5"/></symbol>
   
-    <!-- Паспорт чая -->
     <symbol id="i-leaf" viewBox="0 0 24 24"><path d="M5 19c0-8 5-13 15-14 0 10-5 15-13 15"/><path d="M5 19l8-8"/></symbol>
     <symbol id="i-cup" viewBox="0 0 24 24"><path d="M4 9h12v6a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V9z"/><path d="M16 11h1.5a2.5 2.5 0 0 1 0 5H16"/><path d="M8 2.5c-.6.7-.6 1.8 0 2.5M12 2.5c-.6.7-.6 1.8 0 2.5"/></symbol>
     <symbol id="i-curl" viewBox="0 0 24 24"><path d="M12 12a1.5 1.5 0 1 1 1.5 1.5A3 3 0 0 1 10.5 10.5 4.5 4.5 0 0 1 15 6a6 6 0 0 1 6 6 7.5 7.5 0 0 1-7.5 7.5A9 9 0 0 1 4.5 10.5"/></symbol>
@@ -97,12 +93,11 @@
       </ol>
     </nav>
 
-    <article class="product" data-product>
-      <div class="product__main">
+    <article class="product-card" data-product-card>
+      <div class="product-card__main">
 
-        <div class="product__gallery product-gallery" data-gallery>
+        <div class="product-card__gallery product-gallery" data-gallery>
           <div class="product-gallery__stage">
-            <!-- Всё фото целиком кнопка: клик открывает просмотр. Лупа только подсказывает, что так можно. -->
             <button class="product-gallery__open" type="button" aria-label="Открыть фото 1 из 4 в полном размере" data-gallery-open>
               <picture>
                 <source type="image/avif"
@@ -163,62 +158,61 @@
           </ul>
         </div>
 
-        <header class="product__head">
-          <div class="product__topline">
-            <a class="product__category" href="https://teaboom.ru/category-aromatizirovannyj-ulun">Улун · Ароматизированный</a>
+        <header class="product-card__head">
+          <div class="product-card__topline">
+            <a class="product-card__category" href="https://teaboom.ru/category-aromatizirovannyj-ulun">Улун · Ароматизированный</a>
             <button class="icon-btn" type="button" aria-label="Добавить в избранное" aria-pressed="false" data-favorite>
               <svg class="icon-btn__icon" width="20" height="20" aria-hidden="true"><use href="#i-heart"/></svg>
             </button>
           </div>
 
-          <h1 class="product__title">Ананасовый улун</h1>
+          <h1 class="product-card__title">Ананасовый улун</h1>
 
-          <dl class="product__meta">
-            <div class="product__meta-item">
+          <dl class="product-card__meta">
+            <div class="product-card__meta-item">
               <dt>Арт.</dt>
-              <dd class="product__sku" data-sku>01306</dd>
+              <dd class="product-card__sku" data-product-sku>01306</dd>
             </div>
-            <div class="product__meta-item product__stock">
+            <div class="product-card__meta-item product-card__stock">
               <dt class="visually-hidden">Наличие</dt>
               <dd>В наличии</dd>
             </div>
           </dl>
         </header>
 
-        <p class="product__lead">
+        <p class="product-card__lead">
           Светлый фуцзяньский улун с ароматом спелого ананаса. Крупный изумрудный лист медленно
           раскрывается в чашке и отдаёт весенние травяные ноты.
         </p>
 
-        <form class="product__purchase" action="#" method="post" data-purchase>
-          <fieldset class="pack-picker">
+        <form class="product-card__purchase" action="#" method="post" data-buy-box>
+          <fieldset class="pack-picker" data-pack-picker>
             <legend class="pack-picker__legend">Фасовка</legend>
-            <!-- Цены в копейках не храним, только рубли с точкой: так их же отдаёт бэкенд -->
             <div class="pack-picker__list">
               <label class="pack-picker__item">
                 <input class="pack-picker__input" type="radio" name="pack" value="01306" checked
-                       data-weight="100" data-price="326.40" data-old-price="349.20">
+                       data-pack data-label="100 г" data-weight="100" data-price="326.40" data-old-price="349.20">
                 <span class="pack-picker__weight">100 г</span>
                 <span class="pack-picker__price">326,40 ₽</span>
                 <span class="pack-picker__discount" aria-hidden="true">−7%</span>
               </label>
               <label class="pack-picker__item">
                 <input class="pack-picker__input" type="radio" name="pack" value="01307"
-                       data-weight="500" data-price="1432" data-old-price="1646">
+                       data-pack data-label="500 г" data-weight="500" data-price="1432" data-old-price="1646">
                 <span class="pack-picker__weight">500 г</span>
                 <span class="pack-picker__price">1 432 ₽</span>
                 <span class="pack-picker__discount" aria-hidden="true">−13%</span>
               </label>
               <label class="pack-picker__item">
                 <input class="pack-picker__input" type="radio" name="pack" value="01308"
-                       data-weight="1000" data-price="2064" data-old-price="2592">
+                       data-pack data-label="1000 г" data-weight="1000" data-price="2064" data-old-price="2592">
                 <span class="pack-picker__weight">1000 г</span>
                 <span class="pack-picker__price">2 064 ₽</span>
                 <span class="pack-picker__discount" aria-hidden="true">−20%</span>
               </label>
               <label class="pack-picker__item">
                 <input class="pack-picker__input" type="radio" name="pack" value="01309"
-                       data-weight="5000" data-price="6320" data-old-price="8710">
+                       data-pack data-label="5000 г" data-weight="5000" data-price="6320" data-old-price="8710">
                 <span class="pack-picker__weight">5000 г</span>
                 <span class="pack-picker__price">6 320 ₽</span>
                 <span class="pack-picker__discount" aria-hidden="true">−27%</span>
@@ -227,31 +221,29 @@
           </fieldset>
 
           <div class="buy-box">
-            <div class="price" aria-live="polite" aria-atomic="true">
+            <div class="price" data-price-panel aria-live="polite" aria-atomic="true">
               <p class="price__row">
                 <span class="visually-hidden">Цена:</span>
-                <data class="price__current" value="326.40" data-price-value>326,40 ₽</data>
-                <span class="price__old" data-old-price-wrap>
+                <data class="price__current" value="326.40" data-price-current>326,40 ₽</data>
+                <span class="price__old" data-price-old-wrap>
                   <span class="visually-hidden">без скидки</span>
-                  <s data-old-price-value>349,20 ₽</s>
+                  <s data-price-old>349,20 ₽</s>
                 </span>
               </p>
               <p class="price__info">
-                <span class="price__saving" data-saving-wrap>Выгода <span data-saving>22,80 ₽</span></span>
-                <span class="price__unit" data-unit-price>326,40 ₽ за 100 г</span>
+                <span class="price__saving" data-price-saving-wrap>Выгода <span data-price-saving>22,80 ₽</span></span>
+                <span class="price__unit" data-price-unit>326,40 ₽ за 100 г</span>
               </p>
             </div>
 
-            <!-- Пока фасовки нет в корзине, видна кнопка. После добавления вместо неё счётчик,
-                 который меняет количество уже в корзине. -->
             <div class="buy-box__actions">
               <input type="hidden" name="quantity" value="1">
-              <button class="btn btn--cart" type="submit" data-add-to-cart>
+              <button class="btn btn--cart" type="submit" data-buy-add>
                 <svg class="btn__icon" width="22" height="22" aria-hidden="true"><use href="#i-cart"/></svg>
                 В корзину
               </button>
 
-              <div class="buy-box__in-cart" hidden data-in-cart>
+              <div class="buy-box__in-cart" hidden data-buy-in-cart>
                 <div class="qty">
                   <button class="qty__btn" type="button" aria-label="Убрать одну упаковку" data-qty-dec>
                     <svg width="16" height="16" aria-hidden="true"><use href="#i-minus"/></svg>
@@ -272,7 +264,7 @@
           </div>
         </form>
 
-        <ul class="product__facts facts" aria-label="Как заваривать">
+        <ul class="product-card__facts facts" aria-label="Как заваривать">
           <li class="facts__item">
             <svg class="facts__icon" width="20" height="20" aria-hidden="true"><use href="#i-temperature"/></svg>
             <span class="facts__label">Вода</span>
@@ -354,17 +346,14 @@
     </article>
   </main>
 
-  <!-- Плавающая корзина. Появляется после первого добавления товара -->
   <a class="cart-fab" href="#" hidden data-cart-fab>
     <svg class="cart-fab__icon" width="26" height="26" aria-hidden="true"><use href="#i-cart"/></svg>
     <span class="visually-hidden">Корзина, товаров:</span>
     <span class="cart-fab__count" data-cart-count>0</span>
   </a>
 
-  <!-- Отдельный регион для объявлений скринридеру, чтобы не дёргать aria-live на кнопке -->
-  <p class="visually-hidden" role="status" data-cart-status></p>
+  <p class="visually-hidden" role="status" data-announcer></p>
 
-  <!-- Просмотр фото. Листается стрелками на экране, стрелками клавиатуры и свайпом. -->
   <dialog class="lightbox" aria-label="Просмотр фото" data-lightbox>
     <figure class="lightbox__figure" data-lightbox-stage>
       <img class="lightbox__img" src="assets/img/ananasovyj-ulun-1-970.webp" width="970" height="970"

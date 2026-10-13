@@ -1,0 +1,9 @@
+<ul class="product-card__facts facts" aria-label="Как заваривать">
+  {% for fact in facts %}
+    <li class="facts__item">
+      <svg class="facts__icon" width="20" height="20" aria-hidden="true"><use href="#i-{{ fact.icon }}"/></svg>
+      <span class="facts__label">{{ fact.label }}</span>
+      <b class="facts__value">{{ fact.value }}</b>
+    </li>
+  {% endfor %}
+</ul>

@@ -1,0 +1,33 @@
+$breakpoints: (
+  tablet: 768px,
+  desktop: 1200px,
+);
+
+$colors: (
+  brand: #f5d730,
+  brand-soft: #fefcef,
+  brand-line: #efe6bf,
+  ink: #202020,
+  text: #444,
+  muted: #606060,
+  subtle: #868e96,
+  line: #ddd,
+  line-soft: #eee,
+  surface: #fff,
+  page: #f6f7f8,
+  sale: #d0312d,
+  success: #1e7b34,
+  success-dot: #28a745,
+);
+
+$radius: (
+  sm: 12px,
+  md: 16px,
+  lg: 20px,
+  pill: 50px,
+);
+
+$font-family: "Open Sans", "Helvetica Neue", arial, sans-serif;
+
+$ease: cubic-bezier(0.2, 0.7, 0.3, 1);
+$duration: 0.2s;

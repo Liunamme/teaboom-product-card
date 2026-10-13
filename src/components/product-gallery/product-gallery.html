@@ -1,0 +1,31 @@
+{% with main=images.0 count=images|length %}
+<div class="product-card__gallery product-gallery" data-gallery>
+  <div class="product-gallery__stage">
+    <button class="product-gallery__open" type="button" aria-label="Открыть фото 1 из {{ count }} в полном размере" data-gallery-open>
+      {% include "components/product-gallery/picture/picture.html" with image=main priority=True %}
+      <span class="product-gallery__zoom" aria-hidden="true">
+        <svg width="20" height="20"><use href="#i-zoom"/></svg>
+      </span>
+    </button>
+
+    <p class="product-gallery__badge" data-discount-badge{% if not pack.old_price %} hidden{% endif %}>
+      <span class="visually-hidden">Скидка</span>
+      <span data-discount>−{{ pack.discount_percent }}%</span>
+    </p>
+  </div>
+
+  {% if count > 1 %}
+    <ul class="product-gallery__thumbs" aria-label="Все фото товара">
+      {% for image in images %}
+        <li>
+          <button class="product-gallery__thumb{% if forloop.first %} product-gallery__thumb--active{% endif %}" type="button"
+                  aria-label="Фото {{ forloop.counter }} из {{ count }}"{% if forloop.first %} aria-current="true"{% endif %}
+                  data-gallery-thumb data-base="{{ image.base }}" data-alt="{{ image.alt }}">
+            <img src="{{ image.base }}-thumb.webp" width="80" height="80" alt="" loading="lazy" decoding="async">
+          </button>
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+</div>
+{% endwith %}
