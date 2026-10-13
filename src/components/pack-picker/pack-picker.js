@@ -13,27 +13,25 @@ const readPack = (input) => {
   };
 };
 
-export class PackPicker {
-  constructor(root, { onChange }) {
-    this.inputs = [...root.querySelectorAll('[data-pack]')];
+export const initPackPicker = (root, { onChange }) => {
+  const inputs = [...root.querySelectorAll('[data-pack]')];
 
-    root.addEventListener('change', (event) => {
-      if (!event.target.matches('[data-pack]')) return;
-      this.render();
-      event.target.closest('.pack-picker__item').scrollIntoView({ block: 'nearest', inline: 'nearest' });
-      onChange(this.current);
-    });
+  const getCurrent = () => readPack(inputs.find((input) => input.checked) ?? inputs[0]);
 
-    this.render();
-  }
-
-  get current() {
-    return readPack(this.inputs.find((input) => input.checked) ?? this.inputs[0]);
-  }
-
-  render() {
-    this.inputs.forEach((input) => {
+  const render = () => {
+    inputs.forEach((input) => {
       input.closest('.pack-picker__item').classList.toggle(ACTIVE_CLASS, input.checked);
     });
-  }
-}
+  };
+
+  root.addEventListener('change', (event) => {
+    if (!event.target.matches('[data-pack]')) return;
+    render();
+    event.target.closest('.pack-picker__item').scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    onChange(getCurrent());
+  });
+
+  render();
+
+  return { getCurrent };
+};

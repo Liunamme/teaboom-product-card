@@ -1,33 +1,23 @@
 export const CART_MAX_QTY = 99;
 
-class Cart {
-  #items = new Map();
-  #listeners = new Set();
+const items = new Map();
+const listeners = new Set();
 
-  get(sku) {
-    return this.#items.get(sku) ?? 0;
-  }
+export const getQty = (sku) => items.get(sku) ?? 0;
 
-  get total() {
-    let total = 0;
-    this.#items.forEach((qty) => { total += qty; });
-    return total;
-  }
+export const getTotal = () => [...items.values()].reduce((sum, qty) => sum + qty, 0);
 
-  set(sku, qty) {
-    const next = Math.min(CART_MAX_QTY, Math.max(0, qty));
-    if (next === this.get(sku)) return;
+export const setQty = (sku, qty) => {
+  const next = Math.min(CART_MAX_QTY, Math.max(0, qty));
+  if (next === getQty(sku)) return;
 
-    if (next === 0) this.#items.delete(sku);
-    else this.#items.set(sku, next);
+  if (next === 0) items.delete(sku);
+  else items.set(sku, next);
 
-    this.#listeners.forEach((listener) => listener({ sku, qty: next, total: this.total }));
-  }
+  listeners.forEach((listener) => listener({ sku, qty: next, total: getTotal() }));
+};
 
-  subscribe(listener) {
-    this.#listeners.add(listener);
-    return () => this.#listeners.delete(listener);
-  }
-}
-
-export const cart = new Cart();
+export const subscribe = (listener) => {
+  listeners.add(listener);
+  return () => listeners.delete(listener);
+};

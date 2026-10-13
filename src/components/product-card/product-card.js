@@ -1,44 +1,39 @@
-import { PackPicker } from '../pack-picker/pack-picker.js';
-import { Price, discountPercent } from '../price/price.js';
-import { BuyBox } from '../buy-box/buy-box.js';
-import { ProductGallery } from '../product-gallery/product-gallery.js';
+import { initPackPicker } from '../pack-picker/pack-picker.js';
+import { initPrice, discountPercent } from '../price/price.js';
+import { initBuyBox } from '../buy-box/buy-box.js';
+import { initProductGallery } from '../product-gallery/product-gallery.js';
 
-export class ProductCard {
-  constructor(root) {
-    this.sku = root.querySelector('[data-product-sku]');
-    this.badge = root.querySelector('[data-discount-badge]');
-    this.badgeValue = root.querySelector('[data-discount]');
-    this.favorite = root.querySelector('[data-favorite]');
+const initFavorite = (button) => {
+  button?.addEventListener('click', () => {
+    const pressed = button.getAttribute('aria-pressed') === 'true';
+    button.setAttribute('aria-pressed', String(!pressed));
+    button.setAttribute('aria-label', pressed ? 'Добавить в избранное' : 'Убрать из избранного');
+  });
+};
 
-    new ProductGallery(root.querySelector('[data-gallery]'));
+export const initProductCard = (root) => {
+  const sku = root.querySelector('[data-product-sku]');
+  const badge = root.querySelector('[data-discount-badge]');
+  const badgeValue = root.querySelector('[data-discount]');
 
-    this.price = new Price(root.querySelector('[data-price-panel]'));
-    this.picker = new PackPicker(root.querySelector('[data-pack-picker]'), {
-      onChange: (pack) => this.render(pack),
-    });
-    this.buyBox = new BuyBox(root.querySelector('[data-buy-box]'), {
-      getPack: () => this.picker.current,
-    });
+  initProductGallery(root.querySelector('[data-gallery]'));
+  initFavorite(root.querySelector('[data-favorite]'));
 
-    this.favorite?.addEventListener('click', () => this.toggleFavorite());
+  const price = initPrice(root.querySelector('[data-price-panel]'));
 
-    this.render(this.picker.current);
-  }
-
-  render(pack) {
+  const render = (pack) => {
     const discount = discountPercent(pack);
 
-    this.sku.textContent = pack.sku;
-    this.badge.hidden = discount === 0;
-    this.badgeValue.textContent = `−${discount}%`;
+    sku.textContent = pack.sku;
+    badge.hidden = discount === 0;
+    badgeValue.textContent = `−${discount}%`;
 
-    this.price.render(pack);
-    this.buyBox.render(pack);
-  }
+    price.render(pack);
+    buyBox.render(pack);
+  };
 
-  toggleFavorite() {
-    const pressed = this.favorite.getAttribute('aria-pressed') === 'true';
-    this.favorite.setAttribute('aria-pressed', String(!pressed));
-    this.favorite.setAttribute('aria-label', pressed ? 'Добавить в избранное' : 'Убрать из избранного');
-  }
-}
+  const picker = initPackPicker(root.querySelector('[data-pack-picker]'), { onChange: render });
+  const buyBox = initBuyBox(root.querySelector('[data-buy-box]'), { getPack: picker.getCurrent });
+
+  render(picker.getCurrent());
+};
