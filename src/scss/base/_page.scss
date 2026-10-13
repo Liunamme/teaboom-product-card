@@ -1,0 +1,31 @@
+@use "../abstracts" as *;
+
+// Стили демо-страницы. На teaboom.ru у body и контейнера уже есть свои,
+// поэтому при переносе этот файл не подключаем (см. README).
+
+body {
+  margin: 0;
+  font-family: var(--tb-font);
+  font-size: rem(16px);
+  line-height: 1.5;
+  color: color(ink);
+  background: color(page);
+  -webkit-font-smoothing: antialiased;
+  text-size-adjust: 100%;
+}
+
+.page {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: rem(1200px + 2 * 32px);
+  margin-inline: auto;
+  padding: rem(16px) var(--tb-gutter) rem(112px);
+
+  @include respond-to(desktop) {
+    padding-top: rem(40px);
+  }
+}
+
+.visually-hidden {
+  @include visually-hidden;
+}
