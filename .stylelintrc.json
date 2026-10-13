@@ -1,0 +1,16 @@
+{
+  "extends": "stylelint-config-standard-scss",
+  "rules": {
+    "selector-class-pattern": [
+      "^[a-z][a-z0-9]*(-[a-z0-9]+)*(__[a-z0-9]+(-[a-z0-9]+)*)?(--[a-z0-9]+(-[a-z0-9]+)*)?$",
+      { "message": "Имя класса должно быть в БЭМ: block__element--modifier" }
+    ],
+    "length-zero-no-unit": [true, { "ignoreFunctions": ["var", "/^--/"] }],
+    "declaration-block-no-redundant-longhand-properties": [true, { "ignoreShorthands": ["grid-template"] }],
+    "at-rule-empty-line-before": null,
+    "scss/dollar-variable-empty-line-before": null,
+    "no-descending-specificity": null,
+    "scss/dollar-variable-pattern": "^_?[a-z][a-z0-9-]*$",
+    "keyframes-name-pattern": "^[a-z][a-z0-9-]*$"
+  }
+}

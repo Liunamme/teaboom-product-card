@@ -1,0 +1,30 @@
+{
+  "name": "teaboom-product-card",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Карточка товара для Teaboom.ru: HTML, SCSS, ванильный JS",
+  "author": "Emmanuil Zadorozhnyi",
+  "license": "UNLICENSED",
+  "scripts": {
+    "build:css": "sass src/scss/main.scss dist/css/main.css --no-source-map --style=expanded && postcss dist/css/main.css --use autoprefixer --replace --no-map",
+    "build": "npm run build:css",
+    "watch": "sass src/scss/main.scss dist/css/main.css --watch --embed-source-map",
+    "serve": "npx --yes serve . -l 5174",
+    "lint": "stylelint \"src/scss/**/*.scss\""
+  },
+  "browserslist": [
+    "> 0.5% in RU",
+    "last 2 versions",
+    "not dead",
+    "iOS >= 14",
+    "Safari >= 14"
+  ],
+  "devDependencies": {
+    "autoprefixer": "^10.6.1",
+    "postcss": "^8.5.30",
+    "postcss-cli": "^12.0.0",
+    "sass": "^1.105.1",
+    "stylelint": "^17.16.0",
+    "stylelint-config-standard-scss": "^17.0.0"
+  }
+}
