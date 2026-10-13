@@ -304,7 +304,7 @@ body {
 }
 
 .product-card {
-  --bleed: calc(var(--tb-gutter) + 1rem);
+  --bleed: 1rem;
 }
 @media (min-width: 768px) {
   .product-card {

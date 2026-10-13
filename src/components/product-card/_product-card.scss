@@ -1,7 +1,7 @@
 @use "styles/abstracts" as *;
 
 .product-card {
-  --bleed: calc(var(--tb-gutter) + #{rem(16px)});
+  --bleed: #{rem(16px)};
 
   @include respond-to(tablet) {
     padding: rem(28px);
