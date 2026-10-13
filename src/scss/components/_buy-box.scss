@@ -1,0 +1,45 @@
+@use "../abstracts" as *;
+
+// Цена и кнопки покупки
+.buy-box {
+  display: flex;
+  flex-direction: column;
+  gap: rem(20px);
+
+  @include respond-to(tablet) {
+    flex-direction: row;
+    align-items: center;
+    padding: rem(20px) rem(24px);
+    border-radius: radius(md);
+    background: color(page);
+
+    .price {
+      flex: 1;
+    }
+  }
+
+  // На десктопе колонка уже, поэтому цена сверху, кнопки снизу на всю ширину
+  @include respond-to(desktop) {
+    flex-direction: column;
+    align-items: stretch;
+    padding: rem(24px);
+  }
+
+  &__actions {
+    display: flex;
+    gap: rem(8px);
+
+    @include respond-to(tablet) {
+      gap: rem(12px);
+    }
+
+    .btn {
+      flex: 1;
+      padding-inline: rem(20px);
+
+      @include respond-to(tablet) {
+        min-width: rem(200px);
+      }
+    }
+  }
+}

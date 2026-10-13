@@ -1,0 +1,68 @@
+@use "../abstracts" as *;
+
+// Счётчик количества: кнопки по краям, в центре обычный number, можно вписать руками
+.qty {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  height: rem(56px);
+  border: 1px solid color(line);
+  border-radius: radius(pill);
+  background: color(surface);
+
+  &__btn {
+    display: grid;
+    place-items: center;
+    width: rem(48px);
+    height: 100%;
+    padding: 0;
+    border: 0;
+    border-radius: radius(pill);
+    background: transparent;
+    color: color(ink);
+    cursor: pointer;
+    touch-action: manipulation;
+
+    @include transition(background-color, opacity);
+    @include focus-ring(-2px);
+
+    @include hover {
+      background: color(page);
+    }
+
+    &:disabled {
+      opacity: 0.35;
+      cursor: default;
+      background: transparent;
+    }
+
+    svg {
+      @include icon-stroke(2.2);
+    }
+  }
+
+  &__input {
+    width: 2.5ch;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    font: inherit;
+    font-size: rem(17px);
+    font-weight: 700;
+    text-align: center;
+    color: inherit;
+    font-variant-numeric: tabular-nums;
+    appearance: textfield;
+
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      margin: 0;
+      appearance: none;
+    }
+
+    &:focus-visible {
+      border-radius: 4px;
+      outline: 2px solid color(ink);
+    }
+  }
+}

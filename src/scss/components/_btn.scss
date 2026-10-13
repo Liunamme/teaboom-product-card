@@ -1,0 +1,58 @@
+@use "../abstracts" as *;
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: rem(10px);
+  min-height: rem(56px);
+  padding: 0 rem(28px);
+  border: 0;
+  border-radius: radius(pill);
+  font-family: inherit;
+  font-size: rem(16px);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  touch-action: manipulation;
+  user-select: none;
+
+  @include transition(background-color, color, transform);
+  @include focus-ring(3px);
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  &__icon {
+    @include icon-stroke;
+
+    &--done {
+      display: none;
+    }
+  }
+
+  // Основная кнопка карточки. Ховер как у кнопок на сайте: тёмный фон, жёлтый текст.
+  &--cart {
+    background: color(brand);
+    color: color(ink);
+
+    @include hover {
+      background: color(ink);
+      color: color(brand);
+    }
+  }
+
+  // Короткое подтверждение после добавления, потом кнопка возвращается в обычный вид
+  &--done {
+    .btn__icon {
+      display: none;
+    }
+
+    .btn__icon--done {
+      display: block;
+    }
+  }
+}

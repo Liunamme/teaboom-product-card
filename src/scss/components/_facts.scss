@@ -1,0 +1,40 @@
+@use "../abstracts" as *;
+
+// Плитки с параметрами заваривания
+.facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: rem(8px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  @include respond-to(tablet) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: rem(12px);
+  }
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    gap: rem(2px);
+    padding: rem(12px) rem(14px);
+    border-radius: radius(sm);
+    background: color(surface);
+
+    @include respond-to(tablet) {
+      border: 1px solid color(line-soft);
+    }
+  }
+
+  &__label {
+    font-size: rem(12px);
+    color: color(muted);
+  }
+
+  &__value {
+    font-size: rem(15px);
+    font-weight: 700;
+    white-space: nowrap;
+  }
+}

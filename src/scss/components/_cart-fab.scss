@@ -1,0 +1,76 @@
+@use "../abstracts" as *;
+
+// Плавающая корзина в правом нижнем углу
+.cart-fab {
+  position: fixed;
+  right: max(#{rem(16px)}, env(safe-area-inset-right));
+  bottom: max(#{rem(16px)}, env(safe-area-inset-bottom));
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  width: rem(60px);
+  height: rem(60px);
+  border-radius: 50%;
+  background: color(brand);
+  color: color(ink);
+  box-shadow: 0 6px 20px rgb(32 32 32 / 18%);
+  text-decoration: none;
+  animation: cart-fab-in 0.3s $ease;
+
+  @include transition(background-color, color);
+  @include focus-ring(3px);
+
+  @include hover {
+    background: color(ink);
+    color: color(brand);
+  }
+
+  @include respond-to(desktop) {
+    right: rem(32px);
+    bottom: rem(32px);
+  }
+
+  &[hidden] {
+    display: none;
+  }
+
+  &__icon {
+    @include icon-stroke;
+  }
+
+  &__count {
+    position: absolute;
+    top: rem(-4px);
+    right: rem(-4px);
+    min-width: rem(24px);
+    height: rem(24px);
+    padding: 0 rem(6px);
+    border: 2px solid color(surface);
+    border-radius: rem(12px);
+    background: color(ink);
+    color: color(surface);
+    font-size: rem(12px);
+    font-weight: 700;
+    line-height: rem(20px);
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+
+  // JS ставит класс на каждое добавление, чтобы глаз заметил, что счётчик изменился
+  &--bump &__count {
+    animation: cart-fab-bump 0.35s $ease;
+  }
+}
+
+@keyframes cart-fab-in {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+}
+
+@keyframes cart-fab-bump {
+  40% {
+    transform: scale(1.3);
+  }
+}

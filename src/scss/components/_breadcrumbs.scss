@@ -1,0 +1,89 @@
+@use "../abstracts" as *;
+
+.breadcrumbs {
+  margin-bottom: rem(12px);
+  font-size: rem(14px);
+
+  @include respond-to(tablet) {
+    margin-bottom: rem(20px);
+    font-size: rem(13px);
+  }
+
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: rem(4px) rem(8px);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__item {
+    display: none;
+
+    // На телефоне вместо всей цепочки оставляем одну ссылку «назад» на родительский раздел
+    &:nth-last-child(2) {
+      display: block;
+    }
+
+    @include respond-to(tablet) {
+      align-items: center;
+      gap: rem(8px);
+
+      // Перебиваем мобильное правило с :nth-last-child, оно специфичнее
+      &,
+      &:nth-last-child(2) {
+        display: flex;
+      }
+
+      & + &::before {
+        content: "/";
+        color: color(subtle);
+      }
+    }
+  }
+
+  &__link {
+    display: inline-flex;
+    align-items: center;
+    gap: rem(6px);
+    min-height: rem(44px);
+    border-radius: 4px;
+    color: color(text);
+    text-decoration: none;
+
+    @include transition(color);
+    @include focus-ring;
+
+    @include hover {
+      color: color(ink);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    // Стрелка «назад», только в мобильном варианте
+    .breadcrumbs__item:nth-last-child(2) > &::before {
+      content: "";
+      width: rem(8px);
+      height: rem(8px);
+      margin-right: rem(2px);
+      border-bottom: 2px solid currentcolor;
+      border-left: 2px solid currentcolor;
+      transform: rotate(45deg);
+    }
+
+    @include respond-to(tablet) {
+      min-height: 0;
+      color: color(muted);
+
+      .breadcrumbs__item:nth-last-child(2) > &::before {
+        content: none;
+      }
+    }
+  }
+
+  &__current {
+    color: color(ink);
+  }
+}
