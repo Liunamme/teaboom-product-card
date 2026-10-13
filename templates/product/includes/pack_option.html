@@ -1,0 +1,16 @@
+{% load l10n %}
+{% comment %}
+  Одна плитка фасовки. В data-* цены без локализации, с точкой: их читает JS.
+  Ждёт: pack, checked (True для выбранной по умолчанию).
+{% endcomment %}
+<label class="pack-picker__item{% if checked %} pack-picker__item--active{% endif %}">
+  <input class="pack-picker__input" type="radio" name="pack" value="{{ pack.sku }}"{% if checked %} checked{% endif %}
+         data-weight="{{ pack.weight_g|unlocalize }}"
+         data-price="{{ pack.price|unlocalize }}"
+         {% if pack.old_price %}data-old-price="{{ pack.old_price|unlocalize }}"{% endif %}>
+  <span class="pack-picker__weight">{{ pack.label }}</span>
+  <span class="pack-picker__price">{{ pack.price|floatformat:"-2g" }} ₽</span>
+  {% if pack.old_price %}
+    <span class="pack-picker__discount" aria-hidden="true">−{{ pack.discount_percent }}%</span>
+  {% endif %}
+</label>

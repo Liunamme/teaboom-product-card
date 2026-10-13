@@ -1,0 +1,20 @@
+{% comment %}
+  Адаптивное фото товара: avif, webp и jpg для старых браузеров.
+  priority=True ставим только главному фото, это LCP-элемент страницы.
+  Ждёт: image (у него url, width, height, плюс версии avif_480/avif_970 и т.д. из генератора превью), alt.
+{% endcomment %}
+<picture>
+  <source type="image/avif"
+          srcset="{{ image.avif_480.url }} 480w, {{ image.avif_970.url }} 970w"
+          sizes="(min-width: 1200px) 560px, (min-width: 768px) 300px, calc(100vw - 32px)">
+  <source type="image/webp"
+          srcset="{{ image.webp_480.url }} 480w, {{ image.webp_970.url }} 970w"
+          sizes="(min-width: 1200px) 560px, (min-width: 768px) 300px, calc(100vw - 32px)">
+  <img class="product-gallery__img"
+       src="{{ image.url }}"
+       srcset="{{ image.jpg_480.url }} 480w, {{ image.url }} 970w"
+       sizes="(min-width: 1200px) 560px, (min-width: 768px) 300px, calc(100vw - 32px)"
+       width="{{ image.width }}" height="{{ image.height }}"
+       {% if priority %}fetchpriority="high"{% else %}loading="lazy" decoding="async"{% endif %}
+       alt="{{ alt }}">
+</picture>

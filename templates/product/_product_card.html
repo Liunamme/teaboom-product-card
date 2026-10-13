@@ -1,0 +1,160 @@
+{% comment %}
+  Карточка товара. Та же разметка, что в index.html, только данные приходят из контекста.
+
+  Что ждём от вьюхи:
+    product.name, product.lead, product.description
+    product.category        у категории есть name и get_absolute_url
+    product.image           ImageField, плюс webp/avif версии рядом (image_webp, image_avif)
+    product.packs           фасовки по возрастанию веса: sku, label, weight_g, price,
+                            old_price (может быть None), saving, discount_percent, price_per_100g
+    product.facts           параметры заваривания: label, value
+    product.taste_notes     список строк
+    product.specs           «паспорт» чая: label, value
+    breadcrumbs             список категорий от корня: name, url
+
+  JS (src/js/product-card.js) цепляется за data-атрибуты, классы для него не важны.
+{% endcomment %}
+{% load static l10n %}
+
+<nav class="breadcrumbs" aria-label="Хлебные крошки">
+  <ol class="breadcrumbs__list">
+    {% for crumb in breadcrumbs %}
+      <li class="breadcrumbs__item"><a class="breadcrumbs__link" href="{{ crumb.url }}">{{ crumb.name }}</a></li>
+    {% endfor %}
+    <li class="breadcrumbs__item"><span class="breadcrumbs__current" aria-current="page">{{ product.name }}</span></li>
+  </ol>
+</nav>
+
+{% with pack=product.packs.0 %}
+<article class="product" data-product>
+  <div class="product__main">
+
+    <div class="product__gallery product-gallery">
+      {% include "product/includes/picture.html" with image=product.image alt=product.name priority=True %}
+
+      <p class="product-gallery__badge" data-discount-badge{% if not pack.old_price %} hidden{% endif %}>
+        <span class="visually-hidden">Скидка</span>
+        <span data-discount>−{{ pack.discount_percent }}%</span>
+      </p>
+
+      <button class="icon-btn product-gallery__zoom" type="button" aria-label="Открыть фото целиком" data-lightbox-open>
+        <svg class="icon-btn__icon" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3M11 8v6M8 11h6"/>
+        </svg>
+      </button>
+    </div>
+
+    <header class="product__head">
+      <div class="product__topline">
+        <a class="product__category" href="{{ product.category.get_absolute_url }}">{{ product.category.name }}</a>
+        <button class="icon-btn" type="button" aria-label="Добавить в избранное" aria-pressed="false" data-favorite>
+          <svg class="icon-btn__icon" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/>
+          </svg>
+        </button>
+      </div>
+
+      <h1 class="product__title">{{ product.name }}</h1>
+
+      <dl class="product__meta">
+        <div class="product__meta-item">
+          <dt>Арт.</dt>
+          <dd class="product__sku" data-sku>{{ pack.sku }}</dd>
+        </div>
+        <div class="product__meta-item product__stock">
+          <dt class="visually-hidden">Наличие</dt>
+          <dd>В наличии</dd>
+        </div>
+      </dl>
+    </header>
+
+    <p class="product__lead">{{ product.lead }}</p>
+
+    <form class="product__purchase" action="{% url 'cart:add' %}" method="post" data-purchase>
+      {% csrf_token %}
+
+      <fieldset class="pack-picker">
+        <legend class="pack-picker__legend">Фасовка</legend>
+        <div class="pack-picker__list">
+          {% for item in product.packs %}
+            {% include "product/includes/pack_option.html" with pack=item checked=forloop.first %}
+          {% endfor %}
+        </div>
+      </fieldset>
+
+      <div class="buy-box">
+        <div class="price" aria-live="polite" aria-atomic="true">
+          <p class="price__row">
+            <span class="visually-hidden">Цена:</span>
+            <data class="price__current" value="{{ pack.price|unlocalize }}" data-price-value>{{ pack.price|floatformat:"-2g" }} ₽</data>
+            <span class="price__old" data-old-price-wrap{% if not pack.old_price %} hidden{% endif %}>
+              <span class="visually-hidden">без скидки</span>
+              <s data-old-price-value>{{ pack.old_price|floatformat:"-2g" }} ₽</s>
+            </span>
+          </p>
+          <p class="price__info">
+            <span class="price__saving" data-saving-wrap{% if not pack.old_price %} hidden{% endif %}>
+              Выгода <span data-saving>{{ pack.saving|floatformat:"-2g" }} ₽</span>
+            </span>
+            <span class="price__unit" data-unit-price>{{ pack.price_per_100g|floatformat:"2g" }} ₽ за 100 г</span>
+          </p>
+        </div>
+
+        <div class="buy-box__actions">
+          <div class="qty" data-qty>
+            <button class="qty__btn" type="button" aria-label="Уменьшить количество" data-qty-dec disabled>
+              <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg>
+            </button>
+            <input class="qty__input" type="number" name="quantity" value="1" min="1" max="99"
+                   inputmode="numeric" aria-label="Количество" data-qty-input>
+            <button class="qty__btn" type="button" aria-label="Увеличить количество" data-qty-inc>
+              <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+            </button>
+          </div>
+
+          <button class="btn btn--cart" type="submit" data-add-to-cart>
+            <svg class="btn__icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M3 4h2l2.4 11h11l2-8H6.2"/><circle cx="9.5" cy="19.5" r="1.5"/><circle cx="17" cy="19.5" r="1.5"/>
+            </svg>
+            <svg class="btn__icon btn__icon--done" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M5 12.5l4.5 4.5L19 7.5"/>
+            </svg>
+            <span class="btn__text" data-add-to-cart-text>В корзину</span>
+          </button>
+        </div>
+      </div>
+    </form>
+
+    <ul class="product__facts facts" aria-label="Как заваривать">
+      {% for fact in product.facts %}
+        <li class="facts__item"><span class="facts__label">{{ fact.label }}</span> <b class="facts__value">{{ fact.value }}</b></li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <section class="product-about" aria-labelledby="product-about-title">
+    <div class="product-about__story">
+      <h2 class="product-about__title" id="product-about-title">О чае</h2>
+      <p class="product-about__text">{{ product.description }}</p>
+
+      {% if product.taste_notes %}
+        <h3 class="product-about__subtitle">Ноты вкуса</h3>
+        <ul class="product-about__notes">
+          {% for note in product.taste_notes %}
+            <li class="product-about__note">{{ note }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+
+    <dl class="product-about__specs">
+      {% for spec in product.specs %}
+        <div class="product-about__spec">
+          <dt class="product-about__term">{{ spec.label }}</dt>
+          <dd class="product-about__value">{{ spec.value }}</dd>
+        </div>
+      {% endfor %}
+    </dl>
+  </section>
+</article>
+{% endwith %}
