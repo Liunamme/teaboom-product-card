@@ -186,27 +186,34 @@
               </p>
             </div>
 
+            <!-- Пока фасовки нет в корзине, видна кнопка. После добавления вместо неё счётчик,
+                 который меняет количество уже в корзине. -->
             <div class="buy-box__actions">
-              <div class="qty" data-qty>
-                <button class="qty__btn" type="button" aria-label="Уменьшить количество" data-qty-dec disabled>
-                  <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg>
-                </button>
-                <input class="qty__input" type="number" name="quantity" value="1" min="1" max="99"
-                       inputmode="numeric" aria-label="Количество" data-qty-input>
-                <button class="qty__btn" type="button" aria-label="Увеличить количество" data-qty-inc>
-                  <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
-                </button>
-              </div>
-
+              <input type="hidden" name="quantity" value="1">
               <button class="btn btn--cart" type="submit" data-add-to-cart>
                 <svg class="btn__icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
                   <path d="M3 4h2l2.4 11h11l2-8H6.2"/><circle cx="9.5" cy="19.5" r="1.5"/><circle cx="17" cy="19.5" r="1.5"/>
                 </svg>
-                <svg class="btn__icon btn__icon--done" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M5 12.5l4.5 4.5L19 7.5"/>
-                </svg>
-                <span class="btn__text" data-add-to-cart-text>В корзину</span>
+                В корзину
               </button>
+
+              <div class="buy-box__in-cart" hidden data-in-cart>
+                <div class="qty">
+                  <button class="qty__btn" type="button" aria-label="Убрать одну упаковку" data-qty-dec>
+                    <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg>
+                  </button>
+                  <span class="qty__value" data-qty-value>1</span>
+                  <span class="visually-hidden">шт. в корзине</span>
+                  <button class="qty__btn" type="button" aria-label="Добавить ещё одну упаковку" data-qty-inc>
+                    <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+                  </button>
+                </div>
+
+                <a class="btn btn--outline" href="#">
+                  Оформить
+                  <svg class="btn__icon" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                </a>
+              </div>
             </div>
           </div>
         </form>

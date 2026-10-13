@@ -26,12 +26,13 @@
     transform: scale(0.98);
   }
 
+  // display: inline-flex перебивает атрибут hidden, возвращаем ему силу
+  &[hidden] {
+    display: none;
+  }
+
   &__icon {
     @include icon-stroke;
-
-    &--done {
-      display: none;
-    }
   }
 
   // Основная кнопка карточки. Ховер как у кнопок на сайте: тёмный фон, жёлтый текст.
@@ -45,14 +46,16 @@
     }
   }
 
-  // Короткое подтверждение после добавления, потом кнопка возвращается в обычный вид
-  &--done {
-    .btn__icon {
-      display: none;
-    }
+  // Второстепенное действие рядом с основным, например «Оформить»
+  &--outline {
+    border: 1px solid color(ink);
+    background: color(surface);
+    color: color(ink);
+    text-decoration: none;
 
-    .btn__icon--done {
-      display: block;
+    @include hover {
+      background: color(ink);
+      color: color(brand);
     }
   }
 }

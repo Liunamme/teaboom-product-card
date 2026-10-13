@@ -127,6 +127,9 @@ body {
 .btn:active {
   transform: scale(0.98);
 }
+.btn[hidden] {
+  display: none;
+}
 .btn__icon {
   fill: none;
   stroke: currentcolor;
@@ -134,9 +137,6 @@ body {
   stroke-linecap: round;
   stroke-linejoin: round;
   flex-shrink: 0;
-}
-.btn__icon--done {
-  display: none;
 }
 .btn--cart {
   background: var(--tb-color-brand);
@@ -148,11 +148,17 @@ body {
     color: var(--tb-color-brand);
   }
 }
-.btn--done .btn__icon {
-  display: none;
+.btn--outline {
+  border: 1px solid var(--tb-color-ink);
+  background: var(--tb-color-surface);
+  color: var(--tb-color-ink);
+  text-decoration: none;
 }
-.btn--done .btn__icon--done {
-  display: block;
+@media (hover: hover) {
+  .btn--outline:hover {
+    background: var(--tb-color-ink);
+    color: var(--tb-color-brand);
+  }
 }
 
 .icon-btn {
@@ -501,29 +507,12 @@ body {
   stroke-linejoin: round;
   flex-shrink: 0;
 }
-.qty__input {
-  width: 2.5ch;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  font: inherit;
+.qty__value {
+  min-width: 3ch;
   font-size: 1.0625rem;
   font-weight: 700;
   text-align: center;
-  color: inherit;
   font-variant-numeric: tabular-nums;
-  -webkit-appearance: textfield;
-     -moz-appearance: textfield;
-          appearance: textfield;
-}
-.qty__input::-webkit-outer-spin-button, .qty__input::-webkit-inner-spin-button {
-  margin: 0;
-  -webkit-appearance: none;
-          appearance: none;
-}
-.qty__input:focus-visible {
-  border-radius: 4px;
-  outline: 2px solid var(--tb-color-ink);
 }
 
 .buy-box {
@@ -552,21 +541,36 @@ body {
 }
 .buy-box__actions {
   display: flex;
-  gap: 0.5rem;
 }
 @media (min-width: 768px) {
   .buy-box__actions {
+    width: 21.25rem;
+  }
+}
+@media (min-width: 1200px) {
+  .buy-box__actions {
+    width: auto;
+  }
+}
+.buy-box__actions > .btn {
+  flex: 1;
+}
+.buy-box__in-cart {
+  display: flex;
+  flex: 1;
+  gap: 0.5rem;
+}
+.buy-box__in-cart[hidden] {
+  display: none;
+}
+@media (min-width: 768px) {
+  .buy-box__in-cart {
     gap: 0.75rem;
   }
 }
-.buy-box__actions .btn {
+.buy-box__in-cart .btn {
   flex: 1;
   padding-inline: 1.25rem;
-}
-@media (min-width: 768px) {
-  .buy-box__actions .btn {
-    min-width: 12.5rem;
-  }
 }
 
 .facts {

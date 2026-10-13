@@ -1,14 +1,12 @@
 /**
- * Карточка товара: фасовка, цена, количество, добавление в корзину.
+ * Карточка товара: фасовка, цена, добавление в корзину и количество в ней.
  *
  * Все данные берём из разметки (data-* на radio фасовок), так их отдаст
  * Django-шаблон. JS ничего не знает о конкретном товаре и подойдёт
  * для любой карточки с такой же разметкой.
  */
 
-const QTY_MIN = 1;
 const QTY_MAX = 99;
-const DONE_TIMEOUT = 2000;
 
 // Копейки показываем, только если они есть: «326,40 ₽», но «1 432 ₽»
 const formatRub = (value) =>
@@ -22,11 +20,10 @@ const formatRub = (value) =>
 const readPack = (input) => {
   const price = Number(input.dataset.price);
   const oldPrice = Number(input.dataset.oldPrice) || null;
-  const weight = Number(input.dataset.weight);
 
   return {
     sku: input.value,
-    weight,
+    weight: Number(input.dataset.weight),
     price,
     // Старая цена имеет смысл, только если она правда больше текущей
     oldPrice: oldPrice > price ? oldPrice : null,
@@ -34,9 +31,67 @@ const readPack = (input) => {
   };
 };
 
+/**
+ * Корзина. Настоящей нет, храним количество по артикулу в памяти
+ * и показываем общий счётчик в плавающей кнопке.
+ */
+class Cart {
+  constructor() {
+    this.items = new Map();
+    this.fab = document.querySelector('[data-cart-fab]');
+    this.count = this.fab?.querySelector('[data-cart-count]');
+    this.status = document.querySelector('[data-cart-status]');
+  }
+
+  get(sku) {
+    return this.items.get(sku) ?? 0;
+  }
+
+  get total() {
+    let sum = 0;
+    this.items.forEach((qty) => { sum += qty; });
+    return sum;
+  }
+
+  set(sku, qty, label) {
+    const next = Math.min(QTY_MAX, Math.max(0, qty));
+    const prev = this.get(sku);
+    if (next === prev) return;
+
+    if (next === 0) {
+      this.items.delete(sku);
+    } else {
+      this.items.set(sku, next);
+    }
+
+    this.renderFab();
+    this.announce(next === 0
+      ? `${label} убран из корзины`
+      : `${label}: в корзине ${next} шт`);
+  }
+
+  renderFab() {
+    if (!this.fab) return;
+
+    const total = this.total;
+    this.fab.hidden = total === 0;
+    this.count.textContent = total > 99 ? '99+' : String(total);
+
+    // Перезапуск анимации: снять класс, дать браузеру перерисовать, вернуть
+    this.fab.classList.remove('cart-fab--bump');
+    void this.fab.offsetWidth;
+    this.fab.classList.add('cart-fab--bump');
+  }
+
+  announce(text) {
+    if (this.status) this.status.textContent = `${text}. Всего товаров: ${this.total}.`;
+  }
+}
+
 class ProductCard {
-  constructor(root) {
+  constructor(root, cart) {
     this.root = root;
+    this.cart = cart;
     this.form = root.querySelector('[data-purchase]');
     this.packs = [...root.querySelectorAll('.pack-picker__input')];
 
@@ -50,18 +105,16 @@ class ProductCard {
       unitPrice: root.querySelector('[data-unit-price]'),
       discount: root.querySelector('[data-discount]'),
       discountBadge: root.querySelector('[data-discount-badge]'),
-      qtyInput: root.querySelector('[data-qty-input]'),
+      addToCart: root.querySelector('[data-add-to-cart]'),
+      inCart: root.querySelector('[data-in-cart]'),
+      qtyValue: root.querySelector('[data-qty-value]'),
       qtyDec: root.querySelector('[data-qty-dec]'),
       qtyInc: root.querySelector('[data-qty-inc]'),
-      submit: root.querySelector('[data-add-to-cart]'),
-      submitText: root.querySelector('[data-add-to-cart-text]'),
       favorite: root.querySelector('[data-favorite]'),
       zoom: root.querySelector('[data-lightbox-open]'),
     };
 
-    this.cart = new CartWidget();
     this.lightbox = document.querySelector('[data-lightbox]');
-    this.doneTimer = null;
 
     this.bind();
     this.render();
@@ -71,28 +124,28 @@ class ProductCard {
     return readPack(this.packs.find((input) => input.checked) ?? this.packs[0]);
   }
 
-  get qty() {
-    return Number(this.el.qtyInput.value);
-  }
-
   bind() {
     this.form.addEventListener('change', (event) => {
-      if (event.target.matches('.pack-picker__input')) {
-        this.resetSubmit();
-        this.render();
-        // На телефоне лента фасовок прокручивается, выбранная плитка не должна оставаться за краем
-        event.target.closest('.pack-picker__item').scrollIntoView({ block: 'nearest', inline: 'nearest' });
-      }
+      if (!event.target.matches('.pack-picker__input')) return;
+
+      this.render();
+      // На телефоне лента фасовок прокручивается, выбранная плитка не должна оставаться за краем
+      event.target.closest('.pack-picker__item').scrollIntoView({ block: 'nearest', inline: 'nearest' });
     });
 
-    this.el.qtyDec.addEventListener('click', () => this.setQty(this.qty - 1));
-    this.el.qtyInc.addEventListener('click', () => this.setQty(this.qty + 1));
-    // Ручной ввод чиним, когда пользователь ушёл из поля, а не на каждую цифру
-    this.el.qtyInput.addEventListener('change', () => this.setQty(this.qty));
-
+    // Без JS форма честно отправится на сервер, с JS кладём в корзину на месте
     this.form.addEventListener('submit', (event) => {
       event.preventDefault();
-      this.addToCart();
+      this.changeQty(1);
+      // Кнопка спряталась, фокус переносим на «+», иначе он потеряется
+      this.el.qtyInc.focus();
+    });
+
+    this.el.qtyInc.addEventListener('click', () => this.changeQty(1));
+    this.el.qtyDec.addEventListener('click', () => {
+      const removed = this.cart.get(this.currentPack.sku) === 1;
+      this.changeQty(-1);
+      if (removed) this.el.addToCart.focus();
     });
 
     this.el.favorite?.addEventListener('click', () => {
@@ -112,13 +165,10 @@ class ProductCard {
     }
   }
 
-  setQty(value) {
-    const safe = Number.isFinite(value) ? Math.round(value) : QTY_MIN;
-    const qty = Math.min(QTY_MAX, Math.max(QTY_MIN, safe));
-
-    this.el.qtyInput.value = qty;
-    this.el.qtyDec.disabled = qty <= QTY_MIN;
-    this.el.qtyInc.disabled = qty >= QTY_MAX;
+  changeQty(delta) {
+    const pack = this.currentPack;
+    this.cart.set(pack.sku, this.cart.get(pack.sku) + delta, pack.label);
+    this.renderCartControls();
   }
 
   render() {
@@ -145,54 +195,21 @@ class ProductCard {
       this.el.saving.textContent = formatRub(Math.round(saving * 100) / 100);
       this.el.discount.textContent = `−${Math.round((saving / pack.oldPrice) * 100)}%`;
     }
+
+    this.renderCartControls();
   }
 
-  addToCart() {
-    const pack = this.currentPack;
-    const qty = this.qty;
+  // У каждой фасовки своё количество: переключились, показали её состояние
+  renderCartControls() {
+    const qty = this.cart.get(this.currentPack.sku);
 
-    this.cart.add(qty, `${pack.label}, ${qty} шт`);
-
-    this.el.submit.classList.add('btn--done');
-    this.el.submitText.textContent = 'Добавлено';
-
-    clearTimeout(this.doneTimer);
-    this.doneTimer = setTimeout(() => this.resetSubmit(), DONE_TIMEOUT);
-  }
-
-  resetSubmit() {
-    clearTimeout(this.doneTimer);
-    this.el.submit.classList.remove('btn--done');
-    this.el.submitText.textContent = 'В корзину';
+    this.el.addToCart.hidden = qty > 0;
+    this.el.inCart.hidden = qty === 0;
+    this.el.qtyValue.textContent = qty;
+    this.el.qtyInc.disabled = qty >= QTY_MAX;
+    this.el.qtyDec.setAttribute('aria-label', qty === 1 ? 'Убрать из корзины' : 'Убрать одну упаковку');
   }
 }
 
-// Счётчик корзины. Настоящей корзины нет, просто считаем штуки.
-class CartWidget {
-  constructor() {
-    this.fab = document.querySelector('[data-cart-fab]');
-    this.count = this.fab?.querySelector('[data-cart-count]');
-    this.status = document.querySelector('[data-cart-status]');
-    this.total = 0;
-  }
-
-  add(qty, description) {
-    this.total += qty;
-
-    if (this.fab) {
-      this.fab.hidden = false;
-      this.count.textContent = this.total > 99 ? '99+' : String(this.total);
-
-      // Перезапуск анимации: снять класс, дать браузеру перерисовать, вернуть
-      this.fab.classList.remove('cart-fab--bump');
-      void this.fab.offsetWidth;
-      this.fab.classList.add('cart-fab--bump');
-    }
-
-    if (this.status) {
-      this.status.textContent = `Добавлено в корзину: ${description}. Всего товаров: ${this.total}.`;
-    }
-  }
-}
-
-document.querySelectorAll('[data-product]').forEach((root) => new ProductCard(root));
+const cart = new Cart();
+document.querySelectorAll('[data-product]').forEach((root) => new ProductCard(root, cart));

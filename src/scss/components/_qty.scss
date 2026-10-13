@@ -1,6 +1,6 @@
 @use "../abstracts" as *;
 
-// Счётчик количества: кнопки по краям, в центре обычный number, можно вписать руками
+// Счётчик количества в корзине: кнопки по краям, число в центре
 .qty {
   display: inline-flex;
   flex-shrink: 0;
@@ -41,28 +41,11 @@
     }
   }
 
-  &__input {
-    width: 2.5ch;
-    padding: 0;
-    border: 0;
-    background: transparent;
-    font: inherit;
+  &__value {
+    min-width: 3ch;
     font-size: rem(17px);
     font-weight: 700;
     text-align: center;
-    color: inherit;
     font-variant-numeric: tabular-nums;
-    appearance: textfield;
-
-    &::-webkit-outer-spin-button,
-    &::-webkit-inner-spin-button {
-      margin: 0;
-      appearance: none;
-    }
-
-    &:focus-visible {
-      border-radius: 4px;
-      outline: 2px solid color(ink);
-    }
   }
 }

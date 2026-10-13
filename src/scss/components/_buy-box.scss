@@ -25,9 +25,31 @@
     padding: rem(24px);
   }
 
+  // Ширина одинаковая в обоих состояниях, чтобы при добавлении ничего не прыгало
   &__actions {
     display: flex;
+
+    @include respond-to(tablet) {
+      width: rem(340px);
+    }
+
+    @include respond-to(desktop) {
+      width: auto;
+    }
+
+    > .btn {
+      flex: 1;
+    }
+  }
+
+  &__in-cart {
+    display: flex;
+    flex: 1;
     gap: rem(8px);
+
+    &[hidden] {
+      display: none;
+    }
 
     @include respond-to(tablet) {
       gap: rem(12px);
@@ -36,10 +58,6 @@
     .btn {
       flex: 1;
       padding-inline: rem(20px);
-
-      @include respond-to(tablet) {
-        min-width: rem(200px);
-      }
     }
   }
 }
