@@ -15,16 +15,48 @@
   }
 
   &__item {
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: rem(2px);
     padding: rem(12px) rem(14px);
     border-radius: radius(sm);
     background: color(surface);
+    overflow: hidden;
+    isolation: isolate; // своя стопка слоёв, чтобы z-index иконки не вылез за плитку
 
     @include respond-to(tablet) {
       border: 1px solid color(line-soft);
     }
+
+    @include respond-to(desktop) {
+      padding: rem(14px) rem(16px);
+    }
+
+    // Лёгкий отклик на наведение: иконка чуть выплывает
+    @include hover {
+      .facts__icon {
+        opacity: 0.8;
+        transform: translate(-2px, -2px) rotate(-6deg);
+      }
+    }
+  }
+
+  // Крупная полупрозрачная иконка-подложка в правом нижнем углу.
+  // Стоит абсолютно, поэтому на раскладку текста никак не влияет.
+  &__icon {
+    position: absolute;
+    right: rem(-8px);
+    bottom: rem(-10px);
+    z-index: -1;
+    width: rem(56px);
+    height: rem(56px);
+    color: color(brand);
+    opacity: 0.55;
+    pointer-events: none;
+
+    @include icon-stroke(1.6);
+    @include transition(transform, opacity);
   }
 
   &__label {

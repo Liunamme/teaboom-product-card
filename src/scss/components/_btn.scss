@@ -57,5 +57,26 @@
       background: color(ink);
       color: color(brand);
     }
+
+    // Стрелка «зовёт» дальше, пока курсор на кнопке или на ней фокус с клавиатуры
+    .btn__icon {
+      @include transition(transform);
+    }
+
+    &:focus-visible .btn__icon {
+      animation: btn-arrow-nudge 0.9s $ease infinite;
+    }
+
+    @media (hover: hover) {
+      &:hover .btn__icon {
+        animation: btn-arrow-nudge 0.9s $ease infinite;
+      }
+    }
+  }
+}
+
+@keyframes btn-arrow-nudge {
+  50% {
+    transform: translateX(4px);
   }
 }

@@ -1,0 +1,23 @@
+{% comment %}
+  Просмотр фото. Один на страницу, подключается в base.html перед </body>.
+  Кадры JS берёт из миниатюр галереи, здесь только каркас.
+{% endcomment %}
+<dialog class="lightbox" aria-label="Просмотр фото" data-lightbox>
+  <figure class="lightbox__figure" data-lightbox-stage>
+    <img class="lightbox__img" src="" width="970" height="970" alt="" data-lightbox-img>
+    <figcaption class="lightbox__counter" aria-live="polite" data-lightbox-counter></figcaption>
+  </figure>
+
+  <button class="icon-btn lightbox__nav lightbox__nav--prev" type="button" aria-label="Предыдущее фото" data-lightbox-prev>
+    <svg class="icon-btn__icon" width="20" height="20" aria-hidden="true"><use href="#i-arrow"/></svg>
+  </button>
+  <button class="icon-btn lightbox__nav lightbox__nav--next" type="button" aria-label="Следующее фото" data-lightbox-next>
+    <svg class="icon-btn__icon" width="20" height="20" aria-hidden="true"><use href="#i-arrow"/></svg>
+  </button>
+
+  <form method="dialog">
+    <button class="icon-btn lightbox__close" type="submit" aria-label="Закрыть">
+      <svg class="icon-btn__icon" width="20" height="20" aria-hidden="true"><use href="#i-close"/></svg>
+    </button>
+  </form>
+</dialog>

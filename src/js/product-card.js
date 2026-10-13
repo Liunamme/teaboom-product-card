@@ -6,6 +6,8 @@
  * для любой карточки с такой же разметкой.
  */
 
+import { Gallery } from './gallery.js';
+
 const QTY_MAX = 99;
 
 // Копейки показываем, только если они есть: «326,40 ₽», но «1 432 ₽»
@@ -111,10 +113,10 @@ class ProductCard {
       qtyDec: root.querySelector('[data-qty-dec]'),
       qtyInc: root.querySelector('[data-qty-inc]'),
       favorite: root.querySelector('[data-favorite]'),
-      zoom: root.querySelector('[data-lightbox-open]'),
     };
 
-    this.lightbox = document.querySelector('[data-lightbox]');
+    const gallery = root.querySelector('[data-gallery]');
+    if (gallery) new Gallery(gallery);
 
     this.bind();
     this.render();
@@ -153,16 +155,6 @@ class ProductCard {
       this.el.favorite.setAttribute('aria-pressed', String(!pressed));
       this.el.favorite.setAttribute('aria-label', pressed ? 'Добавить в избранное' : 'Убрать из избранного');
     });
-
-    if (this.lightbox && typeof this.lightbox.showModal === 'function') {
-      this.el.zoom?.addEventListener('click', () => this.lightbox.showModal());
-      // Клик по затемнению вокруг фото тоже закрывает
-      this.lightbox.addEventListener('click', (event) => {
-        if (event.target === this.lightbox) this.lightbox.close();
-      });
-    } else {
-      this.el.zoom?.setAttribute('hidden', '');
-    }
   }
 
   changeQty(delta) {

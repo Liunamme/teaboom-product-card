@@ -4,14 +4,17 @@
   Что ждём от вьюхи:
     product.name, product.lead, product.description
     product.category        у категории есть name и get_absolute_url
-    product.image           ImageField, плюс webp/avif версии рядом (image_webp, image_avif)
+    product.images          кадры галереи: base (путь без размера и расширения, рядом лежат
+                            base-480/-970 в avif, webp, jpg и base-thumb.webp), alt, label
     product.packs           фасовки по возрастанию веса: sku, label, weight_g, price,
                             old_price (может быть None), saving, discount_percent, price_per_100g
-    product.facts           параметры заваривания: label, value
+    product.facts           параметры заваривания: icon, label, value
     product.taste_notes     список строк
-    product.specs           «паспорт» чая: label, value
+    product.specs           «паспорт» чая: icon, label, value
     breadcrumbs             список категорий от корня: name, url
 
+  Просмотр фото (<dialog data-lightbox>) и спрайт иконок подключаются в base.html:
+  templates/includes/lightbox.html и templates/includes/icons.html.
   JS (src/js/product-card.js) цепляется за data-атрибуты, классы для него не важны.
 {% endcomment %}
 {% load static l10n %}
@@ -29,28 +32,43 @@
 <article class="product" data-product>
   <div class="product__main">
 
-    <div class="product__gallery product-gallery">
-      {% include "product/includes/picture.html" with image=product.image alt=product.name priority=True %}
+    {% with main=product.images.0 count=product.images|length %}
+    <div class="product__gallery product-gallery" data-gallery>
+      <div class="product-gallery__stage">
+        <button class="product-gallery__open" type="button" aria-label="Открыть фото 1 из {{ count }} в полном размере" data-gallery-open>
+          {% include "product/includes/picture.html" with image=main priority=True %}
+          <span class="product-gallery__zoom" aria-hidden="true">
+            <svg width="20" height="20"><use href="#i-zoom"/></svg>
+          </span>
+        </button>
 
-      <p class="product-gallery__badge" data-discount-badge{% if not pack.old_price %} hidden{% endif %}>
-        <span class="visually-hidden">Скидка</span>
-        <span data-discount>−{{ pack.discount_percent }}%</span>
-      </p>
+        <p class="product-gallery__badge" data-discount-badge{% if not pack.old_price %} hidden{% endif %}>
+          <span class="visually-hidden">Скидка</span>
+          <span data-discount>−{{ pack.discount_percent }}%</span>
+        </p>
+      </div>
 
-      <button class="icon-btn product-gallery__zoom" type="button" aria-label="Открыть фото целиком" data-lightbox-open>
-        <svg class="icon-btn__icon" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
-          <circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3M11 8v6M8 11h6"/>
-        </svg>
-      </button>
+      {% if count > 1 %}
+        <ul class="product-gallery__thumbs" aria-label="Все фото товара">
+          {% for image in product.images %}
+            <li>
+              <button class="product-gallery__thumb{% if forloop.first %} product-gallery__thumb--active{% endif %}" type="button"
+                      aria-label="Фото {{ forloop.counter }} из {{ count }}: {{ image.label }}"{% if forloop.first %} aria-current="true"{% endif %}
+                      data-gallery-thumb data-base="{{ image.base }}" data-alt="{{ image.alt }}">
+                <img src="{{ image.base }}-thumb.webp" width="80" height="80" alt="" loading="lazy" decoding="async">
+              </button>
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
     </div>
+    {% endwith %}
 
     <header class="product__head">
       <div class="product__topline">
         <a class="product__category" href="{{ product.category.get_absolute_url }}">{{ product.category.name }}</a>
         <button class="icon-btn" type="button" aria-label="Добавить в избранное" aria-pressed="false" data-favorite>
-          <svg class="icon-btn__icon" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/>
-          </svg>
+          <svg class="icon-btn__icon" width="20" height="20" aria-hidden="true"><use href="#i-heart"/></svg>
         </button>
       </div>
 
@@ -107,27 +125,25 @@
         <div class="buy-box__actions">
           <input type="hidden" name="quantity" value="1">
           <button class="btn btn--cart" type="submit" data-add-to-cart>
-            <svg class="btn__icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M3 4h2l2.4 11h11l2-8H6.2"/><circle cx="9.5" cy="19.5" r="1.5"/><circle cx="17" cy="19.5" r="1.5"/>
-            </svg>
+            <svg class="btn__icon" width="22" height="22" aria-hidden="true"><use href="#i-cart"/></svg>
             В корзину
           </button>
 
           <div class="buy-box__in-cart" hidden data-in-cart>
             <div class="qty">
               <button class="qty__btn" type="button" aria-label="Убрать одну упаковку" data-qty-dec>
-                <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg>
+                <svg width="16" height="16" aria-hidden="true"><use href="#i-minus"/></svg>
               </button>
               <span class="qty__value" data-qty-value>1</span>
               <span class="visually-hidden">шт. в корзине</span>
               <button class="qty__btn" type="button" aria-label="Добавить ещё одну упаковку" data-qty-inc>
-                <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+                <svg width="16" height="16" aria-hidden="true"><use href="#i-plus"/></svg>
               </button>
             </div>
 
             <a class="btn btn--outline" href="{% url 'cart:detail' %}">
               Оформить
-              <svg class="btn__icon" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              <svg class="btn__icon" width="20" height="20" aria-hidden="true"><use href="#i-arrow"/></svg>
             </a>
           </div>
         </div>
@@ -136,7 +152,11 @@
 
     <ul class="product__facts facts" aria-label="Как заваривать">
       {% for fact in product.facts %}
-        <li class="facts__item"><span class="facts__label">{{ fact.label }}</span> <b class="facts__value">{{ fact.value }}</b></li>
+        <li class="facts__item">
+          <svg class="facts__icon" width="20" height="20" aria-hidden="true"><use href="#i-{{ fact.icon }}"/></svg>
+          <span class="facts__label">{{ fact.label }}</span>
+          <b class="facts__value">{{ fact.value }}</b>
+        </li>
       {% endfor %}
     </ul>
   </div>
@@ -159,7 +179,10 @@
     <dl class="product-about__specs">
       {% for spec in product.specs %}
         <div class="product-about__spec">
-          <dt class="product-about__term">{{ spec.label }}</dt>
+          <dt class="product-about__term">
+            <svg class="product-about__icon" width="18" height="18" aria-hidden="true"><use href="#i-{{ spec.icon }}"/></svg>
+            {{ spec.label }}
+          </dt>
           <dd class="product-about__value">{{ spec.value }}</dd>
         </div>
       {% endfor %}

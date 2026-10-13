@@ -2,7 +2,7 @@
 
 // Просмотр фото на нативном <dialog>: фокус, Esc и затемнение браузер делает сам
 .lightbox {
-  width: min(92vw, 800px);
+  width: min(92vw, 860px);
   max-height: 92vh;
   padding: 0;
   border: 0;
@@ -11,23 +11,75 @@
   overflow: hidden;
 
   &::backdrop {
-    background: rgb(32 32 32 / 72%);
+    background: rgb(32 32 32 / 80%);
   }
 
   &[open] {
     animation: lightbox-in 0.25s $ease;
   }
 
+  &__figure {
+    position: relative;
+    margin: 0;
+    touch-action: pan-y; // горизонтальный свайп забираем себе, вертикальный оставляем браузеру
+    user-select: none;
+  }
+
   &__img {
     display: block;
     width: 100%;
     height: auto;
+    max-height: 92vh;
+    object-fit: contain;
+    -webkit-user-drag: none;
+
+    @include transition(opacity);
+
+    &--fading {
+      opacity: 0;
+    }
+  }
+
+  &__counter {
+    position: absolute;
+    bottom: rem(14px);
+    left: 50%;
+    padding: rem(4px) rem(12px);
+    border-radius: radius(pill);
+    background: rgb(32 32 32 / 72%);
+    color: color(surface);
+    font-size: rem(13px);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    transform: translateX(-50%);
+  }
+
+  &__nav {
+    position: absolute;
+    top: 50%;
+    border-color: transparent;
+    background: rgb(255 255 255 / 92%);
+    transform: translateY(-50%);
+
+    &--prev {
+      left: rem(12px);
+
+      .icon-btn__icon {
+        transform: scaleX(-1);
+      }
+    }
+
+    &--next {
+      right: rem(12px);
+    }
   }
 
   &__close {
     position: absolute;
     top: rem(12px);
     right: rem(12px);
+    border-color: transparent;
+    background: rgb(255 255 255 / 92%);
   }
 }
 
