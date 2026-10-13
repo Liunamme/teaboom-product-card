@@ -134,30 +134,30 @@
           <ul class="product-gallery__thumbs" aria-label="Все фото товара">
             <li>
               <button class="product-gallery__thumb product-gallery__thumb--active" type="button"
-                      aria-label="Фото 1 из 4: общий вид" aria-current="true"
+                      aria-label="Фото 1 из 4" aria-current="true"
                       data-gallery-thumb data-base="assets/img/ananasovyj-ulun-1" data-alt="Ананасовый улун: крупный скрученный лист с кусочками цукатов">
                 <img src="assets/img/ananasovyj-ulun-1-thumb.webp" width="80" height="80" alt="" loading="lazy" decoding="async">
               </button>
             </li>
             <li>
               <button class="product-gallery__thumb" type="button"
-                      aria-label="Фото 2 из 4: крупный план"
-                      data-gallery-thumb data-base="assets/img/ananasovyj-ulun-2" data-alt="Ананасовый улун крупным планом: кусочки ананаса и папайи">
-                <img src="assets/img/ananasovyj-ulun-2-thumb.webp" width="80" height="80" alt="" loading="lazy" decoding="async">
+                      aria-label="Фото 2 из 4"
+                      data-gallery-thumb data-base="assets/img/ananasovyj-ulun-1" data-alt="Ананасовый улун: крупный скрученный лист с кусочками цукатов">
+                <img src="assets/img/ananasovyj-ulun-1-thumb.webp" width="80" height="80" alt="" loading="lazy" decoding="async">
               </button>
             </li>
             <li>
               <button class="product-gallery__thumb" type="button"
-                      aria-label="Фото 3 из 4: лист и цукаты"
-                      data-gallery-thumb data-base="assets/img/ananasovyj-ulun-3" data-alt="Скрученный лист улуна с цукатами">
-                <img src="assets/img/ananasovyj-ulun-3-thumb.webp" width="80" height="80" alt="" loading="lazy" decoding="async">
+                      aria-label="Фото 3 из 4"
+                      data-gallery-thumb data-base="assets/img/ananasovyj-ulun-1" data-alt="Ананасовый улун: крупный скрученный лист с кусочками цукатов">
+                <img src="assets/img/ananasovyj-ulun-1-thumb.webp" width="80" height="80" alt="" loading="lazy" decoding="async">
               </button>
             </li>
             <li>
               <button class="product-gallery__thumb" type="button"
-                      aria-label="Фото 4 из 4: скрутка листа"
-                      data-gallery-thumb data-base="assets/img/ananasovyj-ulun-4" data-alt="Ананасовый улун: изумрудный лист плотной скрутки">
-                <img src="assets/img/ananasovyj-ulun-4-thumb.webp" width="80" height="80" alt="" loading="lazy" decoding="async">
+                      aria-label="Фото 4 из 4"
+                      data-gallery-thumb data-base="assets/img/ananasovyj-ulun-1" data-alt="Ананасовый улун: крупный скрученный лист с кусочками цукатов">
+                <img src="assets/img/ananasovyj-ulun-1-thumb.webp" width="80" height="80" alt="" loading="lazy" decoding="async">
               </button>
             </li>
           </ul>
@@ -369,15 +369,17 @@
     <figure class="lightbox__figure" data-lightbox-stage>
       <img class="lightbox__img" src="assets/img/ananasovyj-ulun-1-970.webp" width="970" height="970"
            alt="" data-lightbox-img>
-      <figcaption class="lightbox__counter" aria-live="polite" data-lightbox-counter>1 / 4</figcaption>
     </figure>
 
-    <button class="icon-btn lightbox__nav lightbox__nav--prev" type="button" aria-label="Предыдущее фото" data-lightbox-prev>
-      <svg class="icon-btn__icon" width="20" height="20" aria-hidden="true"><use href="#i-arrow"/></svg>
-    </button>
-    <button class="icon-btn lightbox__nav lightbox__nav--next" type="button" aria-label="Следующее фото" data-lightbox-next>
-      <svg class="icon-btn__icon" width="20" height="20" aria-hidden="true"><use href="#i-arrow"/></svg>
-    </button>
+    <div class="lightbox__controls">
+      <button class="icon-btn lightbox__nav lightbox__nav--prev" type="button" aria-label="Предыдущее фото" data-lightbox-prev>
+        <svg class="icon-btn__icon" width="20" height="20" aria-hidden="true"><use href="#i-arrow"/></svg>
+      </button>
+      <p class="lightbox__counter" aria-live="polite" data-lightbox-counter>1 / 4</p>
+      <button class="icon-btn lightbox__nav lightbox__nav--next" type="button" aria-label="Следующее фото" data-lightbox-next>
+        <svg class="icon-btn__icon" width="20" height="20" aria-hidden="true"><use href="#i-arrow"/></svg>
+      </button>
+    </div>
 
     <form method="dialog">
       <button class="icon-btn lightbox__close" type="submit" aria-label="Закрыть">
