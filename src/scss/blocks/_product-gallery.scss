@@ -1,0 +1,53 @@
+@use "../abstracts" as *;
+
+.product-gallery {
+  position: relative;
+  aspect-ratio: 1; // место под фото занято сразу, страница не прыгает при загрузке
+  border-radius: radius(lg);
+  background: color(surface);
+  overflow: hidden;
+
+  @include respond-to(tablet) {
+    border: 1px solid color(line-soft);
+    border-radius: radius(md);
+  }
+
+  &__img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &__badge {
+    position: absolute;
+    top: rem(14px);
+    left: rem(14px);
+    margin: 0;
+    padding: rem(5px) rem(12px);
+    border-radius: radius(pill);
+    background: color(sale);
+    color: color(surface);
+    font-size: rem(14px);
+    font-weight: 700;
+    line-height: 1.4;
+
+    @include respond-to(desktop) {
+      top: rem(20px);
+      left: rem(20px);
+    }
+  }
+
+  &__zoom {
+    position: absolute;
+    top: rem(10px);
+    right: rem(10px);
+    border-color: transparent;
+    background: rgb(255 255 255 / 92%);
+
+    @include respond-to(desktop) {
+      top: rem(16px);
+      right: rem(16px);
+    }
+  }
+}
